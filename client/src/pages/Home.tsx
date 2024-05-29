@@ -91,9 +91,9 @@ export function Home() {
             initial={{ opacity: 0, x: 200 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 200 }}
             transition={{ duration: 0.5, ease: "easeOut", delay: 1 }}
-            className="hidden lg:flex absolute -left-24 top-0 h-full w-56 justify-start z-20 items-end"
+            className="hidden lg:flex absolute -left-36 -bottom-9 h-full w-56 justify-start z-20 items-end"
           >
-            <img src={women} className="w-96" alt="" />
+            <img src={women} className="min-w-96" alt="" />
           </motion.div>
           <img src={Realtime} className="w-full" alt="" />
           <motion.div
@@ -102,7 +102,7 @@ export function Home() {
             transition={{ duration: 0.5, ease: "easeOut", delay: 1 }}
             className="hidden lg:flex absolute -right-24 top-0 h-full w-56 justify-start z-20 items-end"
           >
-            <img src={manwoment} className="w-56" alt="" />
+            <img src={manwoment} className="w-48" alt="" />
           </motion.div>
         </motion.div>
       </motion.div>
