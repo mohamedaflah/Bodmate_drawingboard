@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { oAuth2Client } from "../config/oauth.config";
-
+import { oAuth2Client } from "../../config/oauth.config";
+import { userCreateService } from "../../services/userCreate.service";
+import { generate } from "generate-password";
+import bcrypt from "bcrypt";
 export const OauthCallBackController = async (
   req: Request,
   res: Response,
@@ -21,14 +23,24 @@ export const OauthCallBackController = async (
     });
 
     const payload = ticket.getPayload();
+    const password = generate({
+      length: 10,
+      numbers: true,
+    });
+
     console.log("🚀 ~ payload:", payload);
     if (!payload) {
       throw new Error(`Failed to get user information`);
     }
     const { name, picture, email } = payload;
-    req.session.user = payload;
+    const user = await userCreateService({
+      email: String(email),
+      profile: String(picture),
+      name: String(name),
+      password: bcrypt.hashSync(password, 10),
+    });
+    req.session.user = user;
     console.log("Calling Callback");
-
     res.redirect(process.env.CLIENT_ORIGIN as string);
   } catch (error) {
     next(error);

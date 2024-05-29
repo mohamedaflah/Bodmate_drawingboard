@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { oAuth2Client } from "../config/oauth.config";
+import { oAuth2Client } from "../../config/oauth.config";
 
 export const OauthController = (
   req: Request,

@@ -5,6 +5,7 @@ import session from "express-session";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./routers/userRoute";
+import { IUser } from "./util/types/user.type";
 const app = express();
 declare module "express-session" {
   interface SessionData {
