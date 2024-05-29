@@ -6,6 +6,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./routers/userRoute";
 import { IUser } from "./util/types/user.type";
+import { errHandler } from "./middlewares/errMiddleware";
 const app = express();
 declare module "express-session" {
   interface SessionData {
@@ -29,10 +30,14 @@ app.use(
     secret: process.env.SESSION_SECRET as string,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: true },
+    cookie: {
+      secure: false, // Set to true if using HTTPS
+      maxAge: 7 * 24 * 60 * 60 * 1000, // Session expiration time in milliseconds (1 week)
+    },
   })
 );
 app.use("/api", userRouter);
+app.use(errHandler);
 export default app.listen(process.env.PORT, () => {
   console.log(`Server started`);
 });

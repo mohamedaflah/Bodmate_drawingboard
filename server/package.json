@@ -28,7 +28,8 @@
     "google-auth-library": "^9.10.0",
     "mongoose": "^8.4.0",
     "ts-node": "^10.9.2",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "work-bridge-way-common": "^2.1.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

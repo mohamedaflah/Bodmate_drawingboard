@@ -3,6 +3,7 @@ import { oAuth2Client } from "../../config/oauth.config";
 import { userCreateService } from "../../services/userCreate.service";
 import { generate } from "generate-password";
 import bcrypt from "bcrypt";
+import { checkUser } from "../../services/cheuser.service";
 export const OauthCallBackController = async (
   req: Request,
   res: Response,
@@ -33,14 +34,18 @@ export const OauthCallBackController = async (
       throw new Error(`Failed to get user information`);
     }
     const { name, picture, email } = payload;
-    const user = await userCreateService({
-      email: String(email),
-      profile: String(picture),
-      name: String(name),
-      password: bcrypt.hashSync(password, 10),
-    });
+    let user = await checkUser(String(email));
+    if (!user) {
+      user = await userCreateService({
+        email: String(email),
+        profile: String(picture),
+        name: String(name),
+        password: bcrypt.hashSync(password, 10),
+      });
+    }
     req.session.user = user;
-    console.log("Calling Callback");
+    console.log("Session user set:", req.session.user);
+
     res.redirect(process.env.CLIENT_ORIGIN as string);
   } catch (error) {
     next(error);
