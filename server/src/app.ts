@@ -13,6 +13,14 @@ app.use(
   })
 );
 
+declare module 'express-session' {
+  interface SessionData {
+    user?: { // Make user optional to handle cases where it might not exist
+      [key: string]: any; // Allow for any user data structure
+    };
+  }
+}
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET as string,

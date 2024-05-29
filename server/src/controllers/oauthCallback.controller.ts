@@ -21,9 +21,11 @@ export const OauthCallBackController = async (
     });
 
     const payload = ticket.getPayload();
-    if(!payload){
-        throw new Error(`Failed to get user information`)
+    if (!payload) {
+      throw new Error(`Failed to get user information`);
     }
+    req.session.user = payload;
+    res.redirect(process.env.CLIENT_ORIGIN as string);
   } catch (error) {
     next(error);
   }
