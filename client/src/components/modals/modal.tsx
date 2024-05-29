@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
 const modalVariants = {
-  open: { opacity: 1 },
-  closed: { opacity: 0 },
+  open: { opacity: 1,translateX: 0 },
+  closed: { opacity: 0, translateX: -50, },
 };
 
 interface ChildProp {
@@ -20,7 +20,9 @@ export function CustomModal({ Trigger, title, children }: ChildProp) {
 
   return (
     <div>
-      <div onClick={openModal} className="cursor-pointer">{Trigger}</div>
+      <div onClick={openModal} className="cursor-pointer">
+        {Trigger}
+      </div>
 
       <AnimatePresence>
         {isOpen && (
@@ -29,10 +31,10 @@ export function CustomModal({ Trigger, title, children }: ChildProp) {
             animate="open"
             exit="closed"
             variants={modalVariants}
-            transition={{duration: 0.4, ease: "easeOut", delay: 0 }}
-            className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-45"
+            transition={{ duration: 0.2, ease: "easeOut", delay: 0 }}
+            className="fixed inset-0 flex items-center justify-center bg-slate-950  bg-opacity-45"
           >
-            <motion.div className="bg-white p-6 rounded-md w-[90%] sm:w-[75%] md:w-[66%] lg:w-[43%] xl:w-[34%]">
+            <motion.div className="bg-[white] p-6 rounded-md w-[90%] sm:w-[75%] md:w-[66%] lg:w-[43%] xl:w-[34%]">
               <motion.div className="w-full flex justify-between text-black">
                 <h2 className="text-2xl mb-4">{title}</h2>
                 <X className="w-5 cursor-pointer" onClick={closeModal} />

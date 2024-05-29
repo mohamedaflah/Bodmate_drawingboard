@@ -8,7 +8,8 @@ import { AppDispatch, RootState } from "./redux/root/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getUser } from "./redux/actions/user/getUser";
-import { DrawArea } from "./pages/Drawarea";
+import DrawArea from "./pages/Drawarea";
+
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
@@ -18,7 +19,7 @@ function App() {
   const { user } = useSelector((state: RootState) => state.user);
   return (
     <>
-      <motion.div className="bg-[url('./assets/images/bg-pattern-wave.png')] h-screen w-full bg-cover bg-center bg-fixed">
+      <motion.div className="bg-[url('./assets/images/bg-pattern-wave.png')] h-screen w-full bg-cover bg-center bg-fixed overflow-x-hidden">
         <Header />
         <Routes>
           <Route

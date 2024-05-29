@@ -1,112 +1,112 @@
-import { motion, useInView } from "framer-motion";
-import { ChevronRight } from "lucide-react";
-import Hero from "../assets/images/hero.webp";
-import Realtime from "../assets/images/realtime.svg";
-import women from "../assets/icons/humansitting.svg";
-import manwoment from "../assets/icons/manhuman.svg";
-import { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
-export function DrawArea() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true });
+const DrawArea: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const contextRef = useRef<CanvasRenderingContext2D | null>(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [penColor, setPenColor] = useState("black");
+  const [penSize, setPenSize] = useState(5);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    setPenSize;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.width = `${window.innerWidth}px`;
+    canvas.style.height = `${window.innerHeight}px`;
+
+    const context = canvas.getContext("2d");
+    if (context) {
+      context.scale(1, 1);
+      context.lineCap = "round";
+      context.strokeStyle = penColor;
+      context.lineWidth = penSize;
+      contextRef.current = context;
+    }
+  }, [penColor, penSize]);
+
+  const startDrawing = ({ nativeEvent }: React.MouseEvent) => {
+    const { offsetX, offsetY } = nativeEvent;
+    if (!contextRef.current) return;
+    contextRef.current.beginPath();
+    contextRef.current.moveTo(offsetX / scale, offsetY / scale);
+    setIsDrawing(true);
+  };
+
+  const finishDrawing = () => {
+    if (!contextRef.current) return;
+    contextRef.current.closePath();
+    setIsDrawing(false);
+  };
+
+  const draw = ({ nativeEvent }: React.MouseEvent) => {
+    if (!isDrawing) return;
+    const { offsetX, offsetY } = nativeEvent;
+    if (!contextRef.current) return;
+    contextRef.current.lineTo(offsetX / scale, offsetY / scale);
+    contextRef.current.stroke();
+  };
+
+  const handleZoomIn = () => {
+    setScale((prev) => Math.min(prev * 1.2, 5));
+  };
+
+  const handleZoomOut = () => {
+    setScale((prev) => Math.max(prev * 0.8, 0.5));
+  };
+
   return (
-    <motion.div
-      className="w-full"
-      initial={{ opacity: 0, y: -50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.75, ease: "easeOut" }} // Add transition properties here
-    >
-      <motion.div className="w-full flex justify-center mt-10 flex-col items-center gap-6">
-        <motion.h1
-          className="font-main text-4xl md:text-5xl text-center text-white font-extrabold"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.3 }} // Add transition properties here
+    <div className="relative w-full h-screen bg-white">
+      <canvas
+        ref={canvasRef}
+        onMouseDown={startDrawing}
+        onMouseUp={finishDrawing}
+        onMouseMove={draw}
+        className="border border-gray-300"
+      />
+      <div className="absolute top-4 left-4 flex space-x-2 bg-gray-100 p-2 rounded-md shadow-lg">
+        {penColor == "black" ? (
+          <>
+            <button
+              onClick={() => setPenColor("white")}
+              className="px-4 py-2 bg-gray-800 text-white rounded-md"
+            >
+              Eraser
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => setPenColor("black")}
+              className="px-4 py-2 bg-gray-800 text-white rounded-md"
+            >
+              Pen
+            </button>
+          </>
+        )}
+        <button
+          onClick={() => setPenColor("white")}
+          className="px-4 py-2 bg-gray-800 text-white rounded-md"
         >
-          Planning & Discussion made easy
-        </motion.h1>
-        <motion.h2
-          className="font-main text-gray-400 font-[600] text-[16px] md:text-2xl"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.6 }} // Add transition properties here
+          clear
+        </button>
+        <button
+          onClick={handleZoomIn}
+          className="px-4 py-2 bg-gray-800 text-white rounded-md"
         >
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut", delay: 0.6 }} // Add transition properties here
-            className=""
-          >
-            L
-          </motion.span>
-          aunch
-          <motion.span className=""> a</motion.span>
-          nd
-          <motion.span className=""> g</motion.span>
-          row
-          <motion.span className=""> y</motion.span>
-          our
-          <motion.span className="font-semibold"> d</motion.span>
-          ream
-          <motion.span className="font-semibold"> b</motion.span>
-          usiness
-        </motion.h2>
-      </motion.div>
-      <motion.div className="w-full justify-center mt-5 flex">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.6 }} // Add transition properties here
-          className="flex gap-2"
+          Zoom In
+        </button>
+        <button
+          onClick={handleZoomOut}
+          className="px-4 py-2 bg-gray-800 text-white rounded-md"
         >
-          <input
-            type="text"
-            className="font-main outline-none border-none h-12 md:h-14 rounded-md px-4 items-center w-64 lg:w-96 text-gray-700"
-            placeholder="Enter your email"
-          />
-          <button className="h-12 md:h-14 px-3  md:min-w-36 bg-[#3f59f6] md:px-6 rounded-md text-white flex gap-2 items-center justify-center font-semibold">
-            Get started <ChevronRight className="w-5" />
-          </button>
-        </motion.div>
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut", delay: 1.2 }} // Add transition properties here
-        className="w-full h-full flex justify-center mt-5 "
-      >
-        <img src={Hero} className="lg:w-[65%] w-[95%]" alt="" />
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut", delay: 0.6 }} // Add transition properties here
-        className="w-full bg-white flex justify-center py-4"
-      >
-        <motion.div
-          ref={ref}
-          className="rounded-md border mx-auto w-[90%] lg:w-[80%] shadow-md relative"
-        >
-          <motion.div
-            initial={{ opacity: 0, x: 200 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 200 }}
-            transition={{ duration: 0.5, ease: "easeOut", delay: 1 }}
-            className="hidden lg:flex absolute -left-36 -bottom-9 h-full w-56 justify-start z-20 items-end"
-          >
-            <img src={women} className="min-w-96" alt="" />
-          </motion.div>
-          <img src={Realtime} className="w-full" alt="" />
-          <motion.div
-            initial={{ opacity: 0, x: -200 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -200 }}
-            transition={{ duration: 0.5, ease: "easeOut", delay: 1 }}
-            className="hidden lg:flex absolute -right-24 top-0 h-full w-56 justify-start z-20 items-end"
-          >
-            <img src={manwoment} className="w-48" alt="" />
-          </motion.div>
-        </motion.div>
-      </motion.div>
-     
-    </motion.div>
+          Zoom Out
+        </button>
+      </div>
+    </div>
   );
-}
+};
+
+export default DrawArea;
