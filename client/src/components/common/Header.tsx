@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import { CustomModal } from "../modals/modal";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
+
+
+import { AuthOptions } from "../auth/authOptions";
+
 export function Header() {
   return (
     <motion.div className="flex justify-between h-16 mx-auto w-[75%] sticky top-0 left-0 z-10">
@@ -26,27 +28,14 @@ export function Header() {
         className="flex gap-2 items-center"
       >
         <CustomModal
-          title="Signup"
+          title="Go to Account"
           Trigger={
             <motion.div className="h-9 min-w-20 px-4 flex items-center justify-center text-white text-[14px] font-semibold text-sm capitalize rounded-md bg-[#3d3d3d]">
               my account
             </motion.div>
           }
         >
-          <div className="w-full flex flex-col min-h-40 gap-4 ">
-            <motion.button className="w-full h-14 flex px-4 justify-center gap-2 bg-slate-100 rounded-md items-center text-black">
-              <FcGoogle className="text-2xl" />
-              <motion.span className="text-[15px]">
-                continue with google
-              </motion.span>
-            </motion.button>
-            <motion.button className="w-full h-14 flex px-4 justify-center gap-2 bg-slate-100 rounded-md items-center text-black">
-              <FaFacebook className="text-2xl" />
-              <motion.span className="text-[15px]">
-                continue with facebook
-              </motion.span>
-            </motion.button>
-          </div>
+          <AuthOptions />
         </CustomModal>
         {/* <motion.div className="h-9 min-w-20 flex items-center justify-center text-white text-[14px] font-semibold font-sm rounded-md bg-[#3d3d3d]">
           login

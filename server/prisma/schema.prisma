@@ -14,9 +14,9 @@ datasource db {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
+  id            String   @id @unique @default(dbgenerated("uuid_generate_v4()"))
   name          String
-  email         String
+  email         String   @unique
   profile       String
   status        Boolean
   profilestatus Boolean

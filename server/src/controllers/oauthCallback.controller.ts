@@ -21,10 +21,14 @@ export const OauthCallBackController = async (
     });
 
     const payload = ticket.getPayload();
+    console.log("🚀 ~ payload:", payload);
     if (!payload) {
       throw new Error(`Failed to get user information`);
     }
+    const { name, picture, email } = payload;
     req.session.user = payload;
+    console.log("Calling Callback");
+
     res.redirect(process.env.CLIENT_ORIGIN as string);
   } catch (error) {
     next(error);

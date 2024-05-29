@@ -6,20 +6,22 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./routers/userRoute";
 const app = express();
-app.use(express.json());
-app.use(
-  cors({
-    origin: [process.env.CLIENT_ORIGIN as string],
-  })
-);
-
-declare module 'express-session' {
+declare module "express-session" {
   interface SessionData {
-    user?: { // Make user optional to handle cases where it might not exist
+    user?: {
+      // Make user optional to handle cases where it might not exist
       [key: string]: any; // Allow for any user data structure
     };
   }
 }
+app.use(express.json());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: [process.env.CLIENT_ORIGIN as string],
+    credentials: true,
+  })
+);
 
 app.use(
   session({
@@ -29,7 +31,6 @@ app.use(
     cookie: { secure: true },
   })
 );
-app.use(cookieParser());
 app.use("/api", userRouter);
 export default app.listen(process.env.PORT, () => {
   console.log(`Server started`);
