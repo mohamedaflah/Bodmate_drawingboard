@@ -29,10 +29,10 @@ export function CustomModal({ Trigger, title, children }: ChildProp) {
             animate="open"
             exit="closed"
             variants={modalVariants}
-            // transition={{duration: 0.1, ease: "easeOut", delay: 0 }}
-            className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-10"
+            transition={{duration: 0.4, ease: "easeOut", delay: 0 }}
+            className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-45"
           >
-            <motion.div className="bg-white p-6 rounded-md w-[90%] sm:w-[75%] md:w-[66%] lg:w-[43%] xl:w-[35%]">
+            <motion.div className="bg-white p-6 rounded-md w-[90%] sm:w-[75%] md:w-[66%] lg:w-[43%] xl:w-[34%]">
               <motion.div className="w-full flex justify-between text-black">
                 <h2 className="text-2xl mb-4">{title}</h2>
                 <X className="w-5 cursor-pointer" onClick={closeModal} />
