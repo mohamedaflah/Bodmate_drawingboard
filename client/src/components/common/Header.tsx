@@ -2,11 +2,17 @@ import { motion } from "framer-motion";
 import { CustomModal } from "../modals/modal";
 
 import { AuthOptions } from "../auth/authOptions";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/root/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/root/store";
+import { LoaderCircle } from "lucide-react";
+import { logoutUser } from "../../redux/actions/user/logoutUser";
 
 export function Header() {
-  const { user } = useSelector((state: RootState) => state.user);
+  const { user, loading } = useSelector((state: RootState) => state.user);
+  const dispatch: AppDispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
   return (
     <motion.div className="flex justify-between h-16 mx-auto w-[75%] sticky top-0 left-0 z-10">
       <motion.div
@@ -60,8 +66,14 @@ export function Header() {
                   <button className="h-10 rounded-md px-4 min-w-24 flex items-center justify-center bg-green-500 text-white">
                     Cancel
                   </button>
-                  <button className="h-10 rounded-md px-4 min-w-24 flex items-center justify-center bg-red-500 text-white">
+                  <button
+                    className={`h-10 rounded-md px-4 min-w-24 flex items-center justify-center bg-red-500 text-white gap-2 ${
+                      loading && "pointer-events-none bg-red-300"
+                    }`}
+                    onClick={handleLogout}
+                  >
                     Continue
+                    {loading && <LoaderCircle className="w-5 animate-spin" />}
                   </button>
                 </div>
               </motion.div>
